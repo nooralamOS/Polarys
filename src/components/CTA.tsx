@@ -1,6 +1,6 @@
 export default function CTA() {
   return (
-    <section id="book-call" className="py-24 px-4 bg-black/30">
+    <section id="book-call" className="grid-pattern grid-pattern-right py-24 px-4 bg-black/30">
       <div className="max-w-3xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
           Ready to Turn LinkedIn Into Your{" "}

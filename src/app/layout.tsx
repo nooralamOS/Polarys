@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import DialKitProvider from "@/components/DialKitProvider";
 import { Martian_Mono } from "next/font/google";
 import "./globals.css";
+import DialKitProvider from "@/components/DialKitProvider";
 const martianMono = Martian_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "Polarys - We Turn Your LinkedIn Into a Consistent Revenue Machine",
   description:
     "Trusted by founders backed by Y Combinator, Silicon Valley, and a16z. We turn your LinkedIn into a consistent revenue machine.",
+  icons: {
+    icon: "/polarys logo black.jpeg",
+  },
 };
 
 export default function RootLayout({

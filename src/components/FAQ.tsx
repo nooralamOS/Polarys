@@ -50,7 +50,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-20 px-4 bg-surface">
+    <section className="grid-pattern grid-pattern-left py-20 px-4 bg-surface">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">

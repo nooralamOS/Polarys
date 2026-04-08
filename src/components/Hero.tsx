@@ -1,8 +1,19 @@
 import Image from "next/image";
 
+const STATS_STYLE = {
+  numberSize: 51,
+  labelSize: 19,
+  labelPaddingTop: 13,
+  numberLabelGap: 5,
+  statGap: 38,
+  plus: { size: 56, paddingRight: 4, paddingBottom: 0, offsetY: -4 },
+}
+
 export default function Hero() {
+  const p = STATS_STYLE
+
   return (
-    <section className="hero pt-28 pb-16 md:pt-36 md:pb-24 px-4 relative overflow-hidden">
+    <section className="hero grid-pattern grid-pattern-right pt-28 pb-16 md:pt-36 md:pb-24 px-4 relative overflow-hidden">
       {/* Decorative logo outline */}
       <Image
         src="/logo-outline.svg"
@@ -61,27 +72,43 @@ export default function Hero() {
 
             <div className="h-px w-full max-w-md bg-border/70" />
 
-            <div className="flex flex-wrap items-start justify-center gap-8 sm:gap-12">
-              <div className="flex items-start gap-3 text-left leading-none">
-                <p className="text-5xl sm:text-6xl font-extrabold tracking-tight text-foreground">
-                  <span className="text-accent">+</span>40
-                </p>
-                <p className="pt-1 text-[0.95rem] sm:text-lg font-bold uppercase tracking-[0.08em] text-foreground leading-[0.95]">
-                  TRUSTED
-                  <br />
-                  FOUNDERS
-                </p>
-              </div>
-              <div className="flex items-start gap-3 text-left leading-none">
-                <p className="text-5xl sm:text-6xl font-extrabold tracking-tight text-foreground">
-                  <span className="text-accent">+</span>$50M
-                </p>
-                <p className="pt-1 text-[0.95rem] sm:text-lg font-bold uppercase tracking-[0.08em] text-foreground leading-[0.95]">
-                  PIPELINE
-                  <br />
-                  GENERATED
-                </p>
-              </div>
+            <div
+              className="flex flex-wrap items-start justify-center"
+              style={{ gap: p.statGap }}
+            >
+              {[
+                { number: '+40',  label: 'TRUSTED\nFOUNDERS' },
+                { number: '+$50M', label: 'PIPELINE\nGENERATED' },
+              ].map(({ number, label }) => (
+                <div
+                  key={label}
+                  className="flex items-start text-left leading-none"
+                  style={{ gap: p.numberLabelGap }}
+                >
+                  <p
+                    className="font-extrabold tracking-tight text-foreground"
+                    style={{ fontSize: p.numberSize }}
+                  >
+                    <span
+                      className="text-accent inline-block"
+                      style={{
+                        fontSize: p.plus.size,
+                        paddingRight: p.plus.paddingRight,
+                        paddingBottom: p.plus.paddingBottom,
+                        transform: `translateY(${p.plus.offsetY}px)`,
+                      }}
+                    >+</span>{number.replace('+', '')}
+                  </p>
+                  <p
+                    className="font-bold uppercase tracking-[0.08em] text-foreground leading-[0.95]"
+                    style={{ fontSize: p.labelSize, paddingTop: p.labelPaddingTop }}
+                  >
+                    {label.split('\n').map((line, i) => (
+                      <span key={i}>{line}{i === 0 && <br />}</span>
+                    ))}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -5,7 +5,6 @@ import Clients from "@/components/Clients";
 import First7Days from "@/components/First7Days";
 import ServiceModel from "@/components/ServiceModel";
 import FAQ from "@/components/FAQ";
-import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 export default function Home() {
   return (
@@ -18,7 +17,6 @@ export default function Home() {
         <First7Days />
         <ServiceModel />
         <FAQ />
-        <CTA />
       </main>
       <Footer />
     </>

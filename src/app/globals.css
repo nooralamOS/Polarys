@@ -232,6 +232,11 @@ body::after {
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 /* Card hover */
@@ -314,6 +319,33 @@ html {
   .clients-arc-grid > a:nth-child(2),
   .clients-arc-grid > a:nth-child(3) {
     transform: translateY(10px);
+  }
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 767px) {
+  body {
+    /* background-attachment: fixed causes rendering bugs on iOS Safari */
+    background-attachment: scroll;
+  }
+
+  /* Sticky notes: stack vertically on small screens */
+  .notes-column {
+    gap: 1.25rem !important;
+  }
+
+  .sticky-note-board {
+    flex-wrap: wrap !important;
+    width: auto !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+    padding: 0.5rem 0 !important;
+  }
+
+  .sticky-note {
+    width: min(300px, 88vw) !important;
+    height: auto !important;
+    min-height: 200px !important;
   }
 }
 

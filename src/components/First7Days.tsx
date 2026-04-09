@@ -188,8 +188,47 @@ export default function First7Days() {
         </p>
       </div>
 
-      {/* Timeline */}
-      <div ref={stepsContainerRef} className="max-w-5xl mx-auto w-full relative">
+      {/* Mobile timeline — single column, no GSAP */}
+      <div className="md:hidden max-w-xl mx-auto w-full">
+        {steps.map((item, i) => (
+          <div key={item.day} className="flex gap-4">
+            {/* Dot + connecting line column */}
+            <div className="flex flex-col items-center" style={{ flexShrink: 0, width: 20 }}>
+              <div
+                style={{
+                  width: 18,
+                  height: 18,
+                  borderRadius: '50%',
+                  background: LINE_COLOR,
+                  border: '3px solid #111',
+                  boxShadow: `0 0 0 2px ${LINE_COLOR}, 0 0 12px ${LINE_COLOR}66`,
+                  flexShrink: 0,
+                  marginTop: 20,
+                }}
+              />
+              {i < steps.length - 1 && (
+                <div style={{ flex: 1, width: 2, background: LINE_COLOR, minHeight: 24, marginTop: 4 }} />
+              )}
+            </div>
+            {/* Card */}
+            <div className="flex-1 pb-5">
+              <article
+                style={{
+                  padding: 20,
+                  borderRadius: 12,
+                  background: CARD_BG,
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), 0 4px 24px rgba(0,0,0,0.4)',
+                }}
+              >
+                <CardContent item={item} />
+              </article>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop timeline — alternating left/right with GSAP */}
+      <div ref={stepsContainerRef} className="hidden md:block max-w-5xl mx-auto w-full relative">
         {/* Vertical blue line — JS-positioned from first to last dot center */}
         <div
           ref={lineRef}

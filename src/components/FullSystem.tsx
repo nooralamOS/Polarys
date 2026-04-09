@@ -155,6 +155,7 @@ export default function FullSystem() {
         </div>
 
         <div
+          className="notes-column"
           style={{
             display: "flex",
             flexDirection: "column",

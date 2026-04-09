@@ -74,15 +74,17 @@ export default function CaseStudies() {
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full flex items-center justify-between p-6 text-left"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 min-w-0">
                   <div className="w-10 h-10 bg-accent-light rounded-none flex items-center justify-center shrink-0">
                     <Play className="w-4 h-4 text-accent ml-0.5" />
                   </div>
-                  <div>
-                    <span className="text-lg font-bold">{study.result}</span>
-                    <span className="text-sm text-muted ml-3">
-                      — {study.type}
-                    </span>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-baseline gap-x-2">
+                      <span className="text-lg font-bold whitespace-nowrap">{study.result}</span>
+                      <span className="text-sm text-muted whitespace-nowrap">
+                        — {study.type}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <ChevronDown

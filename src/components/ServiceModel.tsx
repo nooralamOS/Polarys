@@ -17,7 +17,7 @@ const cardStyle = {
   borderRadius: "9px",
   background:   "#1C1C1C",
   border:       "3.1px solid #0178FA",
-  padding:      "39px 63px",
+  padding:      "clamp(24px, 5vw, 39px) clamp(20px, 8vw, 63px)",
 };
 
 const textStyle = {

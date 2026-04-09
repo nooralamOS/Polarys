@@ -50,7 +50,7 @@ export default function Hero() {
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
           We turn your LinkedIn
           <br />
-          into a <span className="highlight">consistent revenue</span> machine
+          into a <span className="highlight">consistent revenue</span> machine.
         </h1>
 
         {/* Social proof bar */}

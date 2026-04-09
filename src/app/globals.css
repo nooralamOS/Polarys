@@ -12,15 +12,14 @@
   --text-muted: #8a8a8f;
   --text-secondary: #b0b0b5;
   --font-subtext: var(--font-martian-mono), "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  --highlight-inset: 0px;
   --highlight-trim: 0px;
-  --highlight-stretch: 0px;
-  --highlight-padding-bottom: 0.16em;
-  --highlight-fill-alpha: 0.24;
-  --highlight-fill-height: 74%;
-  --highlight-fill-y: 58%;
-  --highlight-underline-height: 5px;
-  --highlight-underline-y: 100%;
+  --highlight-stretch: 7.5px;
+  --highlight-padding-bottom: 0.17em;
+  --highlight-fill-alpha: 0.43;
+  --highlight-fill-height: 80%;
+  --highlight-fill-y: 33%;
+  --highlight-underline-height: 8px;
+  --highlight-underline-y: 94%;
 }
 
 @theme inline {
@@ -116,17 +115,37 @@ body::after {
   max-height: 500px;
 }
 
-/* Blue underline highlight */
+/* Blue underline highlight
+ *
+ * Geometry model:
+ *   --highlight-stretch  (px) — extra padding on each side when inset < 0
+ *   --highlight-trim     (px) — inward shrink of fill/underline when inset > 0
+ *
+ * The element is padded outward by `stretch` so the backgrounds visually
+ * extend past the text.  When trimming, the element stays text-width but
+ * the background-size/position pull both layers inward by `trim` on each side.
+ * The two cases are mutually exclusive (one is always 0), so they compose
+ * cleanly without fighting each other.
+ */
 .highlight {
   display: inline-block;
+  /* Stretch: widen the box symmetrically so backgrounds extend past text. */
   padding: 0 var(--highlight-stretch) var(--highlight-padding-bottom);
   background-image:
-    linear-gradient(rgba(43, 127, 255, var(--highlight-fill-alpha)), rgba(43, 127, 255, var(--highlight-fill-alpha))),
+    /* fill layer */
+    linear-gradient(
+      rgba(43, 127, 255, var(--highlight-fill-alpha)),
+      rgba(43, 127, 255, var(--highlight-fill-alpha))
+    ),
+    /* underline layer */
     linear-gradient(var(--accent), var(--accent));
   background-repeat: no-repeat;
+  /* Trim: shrink both layers inward by `trim` on each side.
+     With stretch active, trim is 0, so size stays at 100%. */
   background-size:
-    calc(100% - (var(--highlight-trim) * 2)) var(--highlight-fill-height),
-    calc(100% - (var(--highlight-trim) * 2)) var(--highlight-underline-height);
+    calc(100% - var(--highlight-trim) * 2) var(--highlight-fill-height),
+    calc(100% - var(--highlight-trim) * 2) var(--highlight-underline-height);
+  /* Offset both layers right by `trim` so they're centred in the element. */
   background-position:
     var(--highlight-trim) var(--highlight-fill-y),
     var(--highlight-trim) var(--highlight-underline-y);

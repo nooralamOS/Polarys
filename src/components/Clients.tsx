@@ -523,6 +523,12 @@ type ClientConfig = {
   titleSrc: string;
 };
 
+type HoverParams = {
+  color: string;
+  brightness: number;
+  opacity: number;
+};
+
 function AsciiLogo({
   name,
   artKey,
@@ -531,6 +537,7 @@ function AsciiLogo({
   titleOffsetY,
   params,
   isHovered,
+  hoverParams,
 }: {
   name: string;
   artKey?: string;
@@ -539,6 +546,7 @@ function AsciiLogo({
   titleOffsetY: number;
   params: LogoParams;
   isHovered: boolean;
+  hoverParams: HoverParams;
 }) {
   const grid = artKey ? GRIDS[artKey] : null;
 
@@ -577,9 +585,11 @@ function AsciiLogo({
             style={{
               fontSize: `${params.fontSize}px`,
               lineHeight: 1.05,
-              opacity: params.opacity,
+              opacity: isHovered ? hoverParams.opacity : params.opacity,
               letterSpacing: 0,
-              color: params.color,
+              color: isHovered ? hoverParams.color : params.color,
+              filter: isHovered ? `brightness(${hoverParams.brightness / 100})` : undefined,
+              transition: "color 300ms ease, opacity 300ms ease, filter 300ms ease",
             }}
             aria-hidden="true"
           >
@@ -636,12 +646,14 @@ function ClientLogoItem({
   logoScale,
   titleOffsetY,
   logoGapX,
+  hoverParams,
 }: {
   client: ClientConfig;
   baseParams: LogoParams;
   logoScale: number;
   titleOffsetY: number;
   logoGapX: number;
+  hoverParams: HoverParams;
 }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -698,7 +710,7 @@ function ClientLogoItem({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${client.name} website`}
-      className="flex w-[280px] max-w-full items-center justify-center overflow-hidden transition-all duration-300 hover:brightness-125"
+      className="flex w-[280px] max-w-full items-center justify-center overflow-hidden transition-all duration-300"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onFocus={() => setIsHovered(true)}
@@ -716,12 +728,19 @@ function ClientLogoItem({
         titleOffsetY={titleOffsetY}
         params={logoParams}
         isHovered={isHovered}
+        hoverParams={hoverParams}
       />
     </a>
   );
 }
 
 export default function Clients() {
+  const hoverParams: HoverParams = {
+    color:      "#0178FA",
+    brightness: 110,
+    opacity:    1,
+  };
+
   const params = {
     layout: { logoGapX: 9 },
     logo: { logoScale: 1.21 },
@@ -763,6 +782,7 @@ export default function Clients() {
               logoScale={params.logo.logoScale}
               titleOffsetY={params.title.titleOffsetY}
               logoGapX={params.layout.logoGapX}
+              hoverParams={hoverParams}
             />
           ))}
         </div>

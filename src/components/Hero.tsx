@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { useDialKit } from "dialkit";
+
 const STATS_STYLE = {
   numberSize: 51,
   labelSize: 19,
@@ -12,6 +14,11 @@ const STATS_STYLE = {
 
 export default function Hero() {
   const p = STATS_STYLE
+
+  const d = useDialKit("Stat Number", {
+    letterSpacing: [0.035, -0.1, 0.15, 0.005] as [number, number, number, number],
+    symbolGap:     [0.095, -0.05, 0.15, 0.005] as [number, number, number, number],
+  });
 
   const params = {
     padding: { top: 150, bottom: 0 },
@@ -105,8 +112,8 @@ export default function Hero() {
                   style={{ gap: p.numberLabelGap }}
                 >
                   <p
-                    className="font-extrabold tracking-tight text-foreground"
-                    style={{ fontSize: p.numberSize }}
+                    className="font-extrabold text-foreground"
+                    style={{ fontSize: p.numberSize, letterSpacing: `${d.letterSpacing}em` }}
                   >
                     <span
                       className="text-accent inline-block"
@@ -116,7 +123,13 @@ export default function Hero() {
                         paddingBottom: p.plus.paddingBottom,
                         transform: `translateY(${p.plus.offsetY}px)`,
                       }}
-                    >+</span>{number.replace('+', '')}
+                    >+</span>{(() => {
+                      const text = number.replace('+', '');
+                      if (!text.startsWith('$')) return text;
+                      return <>
+                        <span style={{ letterSpacing: `${d.symbolGap}em` }}>$</span>{text.slice(1)}
+                      </>;
+                    })()}
                   </p>
                   <p
                     className="font-bold uppercase tracking-[0.08em] text-foreground leading-[0.95]"
@@ -133,6 +146,9 @@ export default function Hero() {
         </div>
 
         <a
+          href="https://calendly.com/sohaib-polarys/30-minute-meeting"
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             background: "#0178FA",
             color: "#EDEDED",

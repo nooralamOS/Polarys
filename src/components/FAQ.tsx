@@ -51,7 +51,7 @@ export default function FAQ() {
   const params = {
     layout: { borderRadius: 14, gap: 12 },
     spacing: { paddingX: 19, paddingY: 20 },
-    typography: { questionSize: 16, answerSize: 17 },
+    typography: { questionSize: 17, answerSize: 16 },
   };
 
   return (

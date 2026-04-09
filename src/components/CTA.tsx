@@ -11,8 +11,11 @@ export default function CTA() {
           help you book 2-4 qualified calls per week from LinkedIn.
         </p>
         <a
-          href="#"
-          className="inline-block bg-accent hover:bg-accent-dark text-white font-bold text-lg px-10 py-4 rounded-none transition-colors shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/30"
+          href="https://calendly.com/sohaib-polarys/30-minute-meeting"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-accent hover:bg-accent-dark text-white font-bold text-lg px-10 py-4 transition-colors shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/30"
+          style={{ borderRadius: 9 }}
         >
           Book Your Free Call
         </a>

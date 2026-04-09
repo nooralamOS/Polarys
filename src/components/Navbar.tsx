@@ -42,14 +42,16 @@ export default function Navbar() {
             <a
               key={href}
               href={href}
-              className="text-sm text-secondary hover:text-foreground transition-colors"
+              className="text-xs text-secondary hover:text-foreground transition-colors px-2 py-1"
               onClick={center ? (e) => { e.preventDefault(); scrollToCenter(href); } : undefined}
             >
               {label}
             </a>
           ))}
           <a
-            href="#book-call"
+            href="https://calendly.com/sohaib-polarys/30-minute-meeting"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               background: "#0178FA",
               color: "#EDEDED",
@@ -90,7 +92,9 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#book-call"
+            href="https://calendly.com/sohaib-polarys/30-minute-meeting"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setOpen(false)}
             style={{
               background: "#0178FA",

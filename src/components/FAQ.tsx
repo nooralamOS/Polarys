@@ -73,9 +73,10 @@ export default function FAQ() {
                 key={i}
                 style={{
                   borderRadius: params.layout.borderRadius,
-                  border: "1px solid rgba(255,255,255,0.08)",
                   overflow: "hidden",
                   background: "#1c1c1c",
+                  boxShadow: isOpen ? "0 4px 24px rgba(0,0,0,0.45)" : "none",
+                  transition: "box-shadow 400ms cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
               >
                 <button
@@ -123,6 +124,7 @@ export default function FAQ() {
                       <p
                         style={{
                           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontWeight: 700,
                           fontSize: params.typography.answerSize,
                           lineHeight: 1.6,
                           color: "#ffffff",

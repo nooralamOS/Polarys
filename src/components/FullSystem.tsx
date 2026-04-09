@@ -146,7 +146,7 @@ export default function FullSystem() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
-            The <span className="highlight">Full System</span>
+            Our <span className="highlight">System</span>
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
             Everything you need to turn LinkedIn into a predictable, profitable

@@ -132,6 +132,23 @@ export default function Hero() {
           </div>
         </div>
 
+        <a
+          style={{
+            background: "#0178FA",
+            color: "#EDEDED",
+            fontFamily: "var(--font-martian-mono), monospace",
+            fontWeight: 700,
+            borderRadius: 9,
+            fontSize: 16,
+            padding: "14px 32px",
+            textDecoration: "none",
+            display: "inline-block",
+            marginBottom: 64,
+          }}
+        >
+          Book Call
+        </a>
+
       </div>
     </section>
   );

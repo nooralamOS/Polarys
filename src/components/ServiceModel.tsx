@@ -1,4 +1,15 @@
+"use client";
+
 import { Check } from "lucide-react";
+import { useDialKit } from "dialkit";
+
+const FONTS: Record<string, string> = {
+  "Helvetica Neue": '"Helvetica Neue", Helvetica, Arial, sans-serif',
+  "Georgia":        "Georgia, serif",
+  "Courier New":    '"Courier New", Courier, monospace',
+  "Martian Mono":   "var(--font-martian-mono), monospace",
+  "system-ui":      "system-ui, sans-serif",
+};
 
 const pricingModel = {
   title: "Done For You",
@@ -12,9 +23,65 @@ const pricingModel = {
 };
 
 export default function ServiceModel() {
-  const noteTextColor = "#EDEDED";
-  const cardBackground = "#1C1C1C";
-  const cornerRadius = 9;
+  const p = useDialKit("Pricing Card", {
+    card: {
+      paddingX:     [63, 8, 80],
+      paddingY:     [39, 8, 80],
+      cornerRadius: [9, 0, 40],
+      borderWidth:  [3.1, 0, 8],
+      borderColor:  { type: "color", default: "#0178FA" },
+      background:   { type: "color", default: "#1C1C1C" },
+    },
+    text: {
+      font: {
+        type:    "select",
+        options: Object.keys(FONTS),
+        default: "Martian Mono",
+      },
+      size:   [1.07, 0.7, 1.6],
+      color:  { type: "color", default: "#EDEDED" },
+    },
+    button: {
+      font: {
+        type:    "select",
+        options: Object.keys(FONTS),
+        default: "Martian Mono",
+      },
+      fontSize:     [0.875, 0.65, 1.4],
+      paddingX:     [20, 4, 64],
+      paddingY:     [13, 4, 40],
+      cornerRadius: [9, 0, 40],
+      background:   { type: "color", default: "#0478fa" },
+      color:        { type: "color", default: "#ededed" },
+    },
+  });
+
+  const cardStyle = {
+    borderRadius: `${p.card.cornerRadius}px`,
+    background:   p.card.background,
+    border:       `${p.card.borderWidth}px solid ${p.card.borderColor}`,
+    padding:      `${p.card.paddingY}px ${p.card.paddingX}px`,
+  };
+
+  const textStyle = {
+    fontFamily: FONTS[p.text.font] ?? FONTS["Helvetica Neue"],
+    fontSize:   `${p.text.size}rem`,
+    fontWeight: 700,
+    color:      p.text.color,
+  };
+
+  const buttonStyle = {
+    fontFamily:   FONTS[p.button.font] ?? FONTS["Helvetica Neue"],
+    fontSize:     `${p.button.fontSize}rem`,
+    fontWeight:   700,
+    padding:      `${p.button.paddingY}px ${p.button.paddingX}px`,
+    borderRadius: `${p.button.cornerRadius}px`,
+    background:   p.button.background,
+    color:        p.button.color,
+    display:      "block",
+    textAlign:    "center" as const,
+    textDecoration: "none",
+  };
 
   return (
     <section id="pricing" className="grid-pattern grid-pattern-right py-20 px-4">
@@ -30,80 +97,29 @@ export default function ServiceModel() {
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <div
-            className="p-8 shadow-lg shadow-accent/15"
-            style={{
-              borderRadius: `${cornerRadius}px`,
-              background: cardBackground,
-              border: "2px solid #0178FA",
-            }}
-          >
-            <h3
-              className="mb-2"
-              style={{
-                fontFamily: "var(--font-martian-mono), monospace",
-                fontWeight: 700,
-                fontSize: "2rem",
-                color: noteTextColor,
-                lineHeight: 1.1,
-              }}
-            >
-              {pricingModel.title}
-            </h3>
-            <p
-              className="mb-6"
-              style={{
-                fontFamily: "var(--font-martian-mono), monospace",
-                fontSize: "0.95rem",
-                color: noteTextColor,
-                opacity: 0.9,
-                lineHeight: 1.5,
-              }}
-            >
-              {pricingModel.subtitle}
-            </p>
-
+          <div className="shadow-lg shadow-accent/15" style={cardStyle}>
             <p
               className="mb-4 uppercase tracking-widest"
-              style={{
-                fontFamily: "var(--font-martian-mono), monospace",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: noteTextColor,
-                opacity: 0.95,
-              }}
+              style={{ ...textStyle, fontSize: "0.75rem", opacity: 0.95 }}
             >
               Ideal for
             </p>
+
             <ul className="space-y-3">
               {pricingModel.audience.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-center gap-3"
-                  style={{
-                    color: noteTextColor,
-                    fontFamily: "var(--font-martian-mono), monospace",
-                    fontSize: "1.05rem",
-                    fontWeight: 600,
-                  }}
-                >
-                  <Check className="w-4 h-4 shrink-0" style={{ color: noteTextColor }} />
+                <li key={item} className="flex items-center gap-3" style={textStyle}>
+                  <Check className="w-4 h-4 shrink-0" style={{ color: p.text.color }} />
                   {item}
                 </li>
               ))}
             </ul>
 
-            <a
-              href="#book-call"
-              className="mt-8 block text-center font-semibold text-sm px-6 py-3 transition-colors hover:opacity-95"
-              style={{
-                borderRadius: `${cornerRadius}px`,
-                fontFamily: "var(--font-martian-mono), monospace",
-                background: noteTextColor,
-                color: "#111",
-              }}
-            >
-              Get Started
+            <p className="mt-6" style={{ ...textStyle, opacity: 0.9, lineHeight: 1.5 }}>
+              {pricingModel.subtitle}
+            </p>
+
+            <a href="#book-call" className="mt-8 transition-opacity hover:opacity-90" style={buttonStyle}>
+              Book a Call
             </a>
           </div>
         </div>

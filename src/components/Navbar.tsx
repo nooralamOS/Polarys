@@ -5,11 +5,19 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { label: "The Full System", href: "#agency" },
-  { label: "Clients", href: "#clients" },
-  { label: "Your Timeline", href: "#first-7-days" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Our System", href: "#agency", center: false },
+  { label: "Clients", href: "#clients", center: true },
+  { label: "Your Timeline", href: "#first-7-days", center: false },
+  { label: "Pricing", href: "#pricing", center: true },
 ];
+
+function scrollToCenter(id: string) {
+  const el = document.querySelector(id);
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  const top = rect.top + window.scrollY - window.innerHeight / 2 + rect.height / 2;
+  window.scrollTo({ top, behavior: "smooth" });
+}
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -30,11 +38,12 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map(({ label, href }) => (
+          {NAV_LINKS.map(({ label, href, center }) => (
             <a
               key={href}
               href={href}
               className="text-sm text-secondary hover:text-foreground transition-colors"
+              onClick={center ? (e) => { e.preventDefault(); scrollToCenter(href); } : undefined}
             >
               {label}
             </a>
@@ -70,12 +79,12 @@ export default function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-background border-t border-border px-4 pb-4 flex flex-col gap-2">
-          {NAV_LINKS.map(({ label, href }) => (
+          {NAV_LINKS.map(({ label, href, center }) => (
             <a
               key={href}
               href={href}
               className="block mt-2 text-sm text-secondary hover:text-foreground transition-colors"
-              onClick={() => setOpen(false)}
+              onClick={center ? (e) => { e.preventDefault(); setOpen(false); scrollToCenter(href); } : () => setOpen(false)}
             >
               {label}
             </a>

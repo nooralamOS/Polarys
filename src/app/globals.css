@@ -12,6 +12,15 @@
   --text-muted: #8a8a8f;
   --text-secondary: #b0b0b5;
   --font-subtext: var(--font-martian-mono), "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --highlight-inset: 0px;
+  --highlight-trim: 0px;
+  --highlight-stretch: 0px;
+  --highlight-padding-bottom: 0.16em;
+  --highlight-fill-alpha: 0.24;
+  --highlight-fill-height: 74%;
+  --highlight-fill-y: 58%;
+  --highlight-underline-height: 5px;
+  --highlight-underline-y: 100%;
 }
 
 @theme inline {
@@ -109,14 +118,18 @@ body::after {
 
 /* Blue underline highlight */
 .highlight {
-  display: inline;
-  padding: 0 0.18em 0.1em;
+  display: inline-block;
+  padding: 0 var(--highlight-stretch) var(--highlight-padding-bottom);
   background-image:
-    linear-gradient(rgba(43, 127, 255, 0.24), rgba(43, 127, 255, 0.24)),
+    linear-gradient(rgba(43, 127, 255, var(--highlight-fill-alpha)), rgba(43, 127, 255, var(--highlight-fill-alpha))),
     linear-gradient(var(--accent), var(--accent));
   background-repeat: no-repeat;
-  background-size: 100% 72%, calc(100% - 0.36em) 4px;
-  background-position: 0 60%, 0.18em calc(100% - 0.02em);
+  background-size:
+    calc(100% - (var(--highlight-trim) * 2)) var(--highlight-fill-height),
+    calc(100% - (var(--highlight-trim) * 2)) var(--highlight-underline-height);
+  background-position:
+    var(--highlight-trim) var(--highlight-fill-y),
+    var(--highlight-trim) var(--highlight-underline-y);
   border-radius: 0;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;

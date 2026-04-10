@@ -74,8 +74,8 @@ export default function Navbar() {
         id="site-navbar"
         className="fixed top-0 left-0 right-0 z-50 border-b border-border overflow-hidden"
         style={{
-          backdropFilter: isIOSWebKit ? "blur(2px) contrast(1.08)" : "url(#ascii-pixelate)",
-          WebkitBackdropFilter: isIOSWebKit ? "blur(2px) contrast(1.08)" : "url(#ascii-pixelate)",
+          backdropFilter: isIOSWebKit ? "blur(12px) contrast(1.6) saturate(1.4)" : "url(#ascii-pixelate)",
+          WebkitBackdropFilter: isIOSWebKit ? "blur(12px) contrast(1.6) saturate(1.4)" : "url(#ascii-pixelate)",
           background: "rgba(12, 12, 12, 0.88)",
         }}
       >
@@ -103,11 +103,10 @@ export default function Navbar() {
             <Image
               src="/logo_png.png"
               alt="Polarys"
-              width={416}
-              height={416}
+              width={logoParams.logoSize}
+              height={logoParams.logoSize}
               style={{
-                height: logoParams.logoSize,
-                width: logoParams.logoSize,
+                objectFit: "contain",
                 transform: `translate(${logoParams.offsetX}px, ${logoParams.offsetY}px)`,
               }}
             />

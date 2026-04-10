@@ -74,11 +74,30 @@ export default function Navbar() {
         id="site-navbar"
         className="fixed top-0 left-0 right-0 z-50 border-b border-border overflow-hidden"
         style={{
-          backdropFilter: isIOSWebKit ? "blur(2px) contrast(1.08)" : "url(#ascii-pixelate)",
-          WebkitBackdropFilter: isIOSWebKit ? "blur(2px) contrast(1.08)" : "url(#ascii-pixelate)",
+          backdropFilter: isIOSWebKit ? "blur(1px) contrast(1.2) saturate(1.08)" : "url(#ascii-pixelate)",
+          WebkitBackdropFilter: isIOSWebKit ? "blur(1px) contrast(1.2) saturate(1.08)" : "url(#ascii-pixelate)",
           background: "rgba(12, 12, 12, 0.88)",
         }}
       >
+        {/* iOS-only faux pixelation layer to mimic desktop SVG filter output */}
+        {isIOSWebKit && (
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+              zIndex: 0,
+              backgroundImage: [
+                "repeating-linear-gradient(0deg, rgba(255,255,255,0.085) 0px, rgba(255,255,255,0.085) 1px, rgba(0,0,0,0.12) 1px, rgba(0,0,0,0.12) 4px)",
+                "repeating-linear-gradient(90deg, rgba(255,255,255,0.07) 0px, rgba(255,255,255,0.07) 1px, rgba(0,0,0,0.1) 1px, rgba(0,0,0,0.1) 4px)",
+              ].join(", "),
+              opacity: 0.34,
+              mixBlendMode: "overlay",
+            }}
+          />
+        )}
+
         {/* Character-cell grid overlay — horizontal rows + vertical columns at ASCII proportions */}
         <div
           aria-hidden="true"

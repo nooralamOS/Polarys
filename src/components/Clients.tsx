@@ -639,10 +639,8 @@ function AsciiLogo({
         <img
           src={titleSrc}
           alt={`${name} title`}
-          className="h-6 object-contain"
+          className="h-6 w-auto object-contain"
           style={{
-            width: "auto",
-            alignSelf: "center",
             opacity: 1,
             filter: "brightness(0) saturate(100%) invert(100%)",
           }}

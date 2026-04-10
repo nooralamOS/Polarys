@@ -77,7 +77,7 @@ export default function ServiceModel() {
             </p>
 
             <a
-              href="https://calendly.com/sohaib-polarys/30-minute-meeting"
+              href="https://calendly.com/sohaib-polarys/30min"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 transition-opacity hover:opacity-90"

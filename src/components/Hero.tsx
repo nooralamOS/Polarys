@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-
+import { useEffect, useState } from "react";
 const STATS_STYLE = {
   numberSize: 51,
   labelSize: 19,
@@ -10,15 +10,39 @@ const STATS_STYLE = {
   statGap: 38,
   plus: { size: 56, paddingRight: 4, paddingBottom: 0, offsetY: -4 },
 }
+const STATS_STYLE_MOBILE = {
+  numberSize: 30,
+  labelSize: 11,
+  labelPaddingTop: 8,
+  numberLabelGap: 3,
+  statGap: 20,
+  plus: { size: 33, paddingRight: 2, paddingBottom: 0, offsetY: -2 },
+}
 
 export default function Hero() {
-  const p = STATS_STYLE
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const p = isMobile ? STATS_STYLE_MOBILE : STATS_STYLE
 
   const d = { letterSpacing: 0.035, symbolGap: 0.095 };
 
-  const params = {
+  const dial = { offsetY: 0 };
+
+const params = {
     padding: { top: 150, bottom: 0 },
-    svg: { widthPx: 720, opacity: 0.2, left: -70, translateY: -50 },
+    svg: {
+      widthPx:    isMobile ? 1600 : 990,
+      opacity:    isMobile ? 0.14 : 0.2,
+      left:       isMobile ? -200 : -80,
+      translateY: isMobile ? -49  : -50,
+    },
   }
 
   return (
@@ -38,7 +62,7 @@ export default function Hero() {
         height={421}
         className="absolute pointer-events-none select-none z-[1] h-auto"
         style={{
-          width: params.svg.widthPx,
+          width: `${params.svg.widthPx}px`,
           opacity: params.svg.opacity,
           left: params.svg.left,
           top: "50%",
@@ -48,19 +72,22 @@ export default function Hero() {
       />
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
-          We turn your LinkedIn
-          <br />
-          into a <span className="highlight">consistent revenue</span> machine.
+          <span className="sm:hidden">
+            We turn your<br />LinkedIn into a<br /><span className="highlight">consistent revenue</span><br />machine.
+          </span>
+          <span className="hidden sm:inline">
+            We turn your LinkedIn<br />into a <span className="highlight">consistent revenue</span> machine.
+          </span>
         </h1>
 
         {/* Social proof bar */}
-        <div className="mt-10 mb-12">
-          <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-5 px-4 py-3 sm:px-6">
+        <div className="mt-10 mb-12" style={{ transform: `translateY(${dial.offsetY}px)` }}>
+          <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-2 px-4 py-1 sm:px-6">
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
-              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-muted text-center sm:text-left">
+              <span className="font-semibold uppercase tracking-[0.24em] text-muted whitespace-nowrap" style={{ fontSize: "clamp(0.6rem, 2.2vw, 0.75rem)" }}>
                 Trusted by founders backed by
               </span>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center" style={{ gap: isMobile ? 23 : 12 }}>
                 <Image
                   src="/backed_by/Y_Combinator_logo.svg.png"
                   alt="Y Combinator"
@@ -95,7 +122,7 @@ export default function Hero() {
             <div className="h-px w-full max-w-md bg-border/70" />
 
             <div
-              className="flex flex-wrap items-start justify-center"
+              className="flex flex-nowrap items-start justify-center"
               style={{ gap: p.statGap }}
             >
               {[
@@ -109,7 +136,7 @@ export default function Hero() {
                 >
                   <p
                     className="font-extrabold text-foreground"
-                    style={{ fontSize: p.numberSize, letterSpacing: `${d.letterSpacing}em` }}
+                    style={{ fontSize: p.numberSize, letterSpacing: `${d.letterSpacing}em`, whiteSpace: 'nowrap' }}
                   >
                     <span
                       className="text-accent inline-block"
@@ -142,7 +169,7 @@ export default function Hero() {
         </div>
 
         <a
-          href="https://calendly.com/sohaib-polarys/30-minute-meeting"
+          href="https://calendly.com/sohaib-polarys/30min"
           target="_blank"
           rel="noopener noreferrer"
           style={{

@@ -20,19 +20,7 @@ const services = [
   },
   {
     number: 3,
-    title: "DM Management & Appointment Setting",
-    description:
-      "We manage your LinkedIn inbox, qualify leads, and book calls directly onto your calendar.",
-  },
-  {
-    number: 4,
-    title: "Targeted LinkedIn Ads",
-    description:
-      "Low-cost, high-impact LinkedIn ad campaigns that boost your best content to ideal prospects.",
-  },
-  {
-    number: 5,
-    title: "Hyper-Personalized Outreach",
+    title: "Hyper-Personalized Outreach (Optional)",
     description:
       "Scaled outbound campaigns that feel personal — targeting decision makers with tailored messaging.",
   },
@@ -155,40 +143,17 @@ export default function FullSystem() {
         </div>
 
         <div
-          className="notes-column"
+          className="sticky-note-board"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: `${rowGap}px`,
+            gap: `${cardGap}px`,
+            flexWrap: "nowrap",
+            width: `${width * 3 + cardGap * 2}px`,
+            maxWidth: "100%",
+            margin: "0 auto",
+            padding: 0,
           }}
         >
-          <div
-            className="sticky-note-board"
-            style={{
-              gap: `${cardGap}px`,
-              flexWrap: "nowrap",
-              width: `${width * 3 + cardGap * 2}px`,
-              maxWidth: "100%",
-              margin: "0 auto",
-              padding: 0,
-            }}
-          >
-            {services.slice(0, 3).map((service, index) => renderCard(service, index))}
-          </div>
-
-          <div
-            className="sticky-note-board"
-            style={{
-              gap: `${cardGap}px`,
-              flexWrap: "nowrap",
-              width: `${width * 2 + cardGap}px`,
-              maxWidth: "100%",
-              margin: "0 auto",
-              padding: 0,
-            }}
-          >
-            {services.slice(3).map((service, index) => renderCard(service, index + 3))}
-          </div>
+          {services.map((service, index) => renderCard(service, index))}
         </div>
       </div>
     </section>

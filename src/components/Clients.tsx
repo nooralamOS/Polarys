@@ -16,9 +16,29 @@ function parseArt(art: string): BoolGrid {
   while (e > s && lines[e].trim() === "") e--;
   const trimmed = lines.slice(s, e + 1);
   const width = Math.max(...trimmed.map((l) => l.length));
-  return trimmed.map((line) =>
+  const grid = trimmed.map((line) =>
     Array.from({ length: width }, (_, i) => line[i] !== " " && line[i] !== undefined)
   );
+
+  // Crop horizontal/vertical empty space so logos are centered by real pixels.
+  let minX = width;
+  let maxX = -1;
+  let minY = grid.length;
+  let maxY = -1;
+
+  for (let y = 0; y < grid.length; y++) {
+    for (let x = 0; x < width; x++) {
+      if (!grid[y][x]) continue;
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
+  }
+
+  if (maxX < minX || maxY < minY) return grid;
+
+  return grid.slice(minY, maxY + 1).map((row) => row.slice(minX, maxX + 1));
 }
 
 /**
@@ -521,6 +541,7 @@ type ClientConfig = {
   seed: number;
   href: string;
   titleSrc: string;
+  ycBadge?: string;
 };
 
 type HoverParams = {
@@ -535,6 +556,7 @@ function AsciiLogo({
   seed,
   titleSrc,
   titleOffsetY,
+  ycBadge,
   params,
   isHovered,
   hoverParams,
@@ -544,6 +566,7 @@ function AsciiLogo({
   seed: number;
   titleSrc: string;
   titleOffsetY: number;
+  ycBadge?: string;
   params: LogoParams;
   isHovered: boolean;
   hoverParams: HoverParams;
@@ -578,10 +601,10 @@ function AsciiLogo({
 
   return (
     <div className="inline-flex w-full max-w-[280px] flex-col items-center text-center">
-      <div className="flex h-[160px] w-full items-center justify-center">
+      <div className="flex h-[110px] sm:h-[160px] w-full items-center justify-center">
         {grid ? (
           <pre
-            className="font-mono select-none mx-auto"
+            className="font-mono select-none mx-auto m-0"
             style={{
               fontSize: `${params.fontSize}px`,
               lineHeight: 1.05,
@@ -610,7 +633,7 @@ function AsciiLogo({
         )}
       </div>
       <div
-        className="flex w-full items-center justify-center"
+        className="flex flex-col w-full items-center justify-start min-h-[52px]"
         style={{ marginTop: `${titleOffsetY}px` }}
       >
         <img
@@ -622,6 +645,11 @@ function AsciiLogo({
             filter: "brightness(0) saturate(100%) invert(100%)",
           }}
         />
+        {ycBadge && (
+          <span className="mt-1 text-[13px] font-mono text-white tracking-wide">
+            [{ycBadge}]
+          </span>
+        )}
       </div>
     </div>
   );
@@ -634,9 +662,10 @@ const clients: ClientConfig[] = [
     seed: 1.2,
     href: "https://withentropy.ai/",
     titleSrc: "/titles/entropy-PNG.png",
+    ycBadge: "YC S24",
   },
   { name: "gryd", artKey: "GRYD", seed: 3.7, href: "https://gryd.energy/", titleSrc: "/titles/gryd-PNG.png" },
-  { name: "HEX", artKey: "HEX", seed: 6.1, href: "https://hex.co/", titleSrc: "/titles/HEX.png" },
+  { name: "HEX", artKey: "HEX", seed: 6.1, href: "https://hex.co/", titleSrc: "/titles/HEX.png", ycBadge: "YC W26" },
   { name: "milkstraw", artKey: "MILKSTRAW", seed: 9.4, href: "https://www.milkstraw.ai/", titleSrc: "/titles/milkstraw-PNG.png" },
 ];
 
@@ -716,7 +745,8 @@ function ClientLogoItem({
       onFocus={() => setIsHovered(true)}
       onBlur={() => setIsHovered(false)}
       style={{
-        padding: `${defaults.spacingPadding}px`,
+        paddingBlock: 0,
+        paddingInline: `${Math.max(0, defaults.spacingPadding)}px`,
         marginInline: logoGapX < 0 ? `${logoGapX / 2}px` : undefined,
       }}
     >
@@ -726,6 +756,7 @@ function ClientLogoItem({
         seed={client.seed}
         titleSrc={client.titleSrc}
         titleOffsetY={titleOffsetY}
+        ycBadge={client.ycBadge}
         params={logoParams}
         isHovered={isHovered}
         hoverParams={hoverParams}
@@ -735,6 +766,16 @@ function ClientLogoItem({
 }
 
 export default function Clients() {
+  const arcOffsets = [0, 10, 0, 0];
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const hoverParams: HoverParams = {
     color:      "#0178FA",
     brightness: 110,
@@ -743,7 +784,7 @@ export default function Clients() {
 
   const params = {
     layout: { logoGapX: 9 },
-    logo: { logoScale: 1.21 },
+    logo: { logoScale: isMobile ? 0.82 : 1.21 },
     title: { titleOffsetY: -4 },
   };
 
@@ -762,7 +803,7 @@ export default function Clients() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
-            Backed by <span className="highlight">Builders</span>
+            Trusted by Industry-Leading <span className="highlight">Builders</span>
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
             We help high-growth companies turn founder-led LinkedIn into a
@@ -771,19 +812,20 @@ export default function Clients() {
         </div>
 
         <div
-          className="clients-arc-grid grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 place-items-center gap-y-12"
+          className="clients-arc-grid grid grid-cols-2 xl:grid-cols-4 justify-items-center items-start gap-y-12"
           style={{ columnGap: `${Math.max(0, params.layout.logoGapX)}px` }}
         >
-          {clients.map((client) => (
-            <ClientLogoItem
-              key={client.name}
-              client={client}
-              baseParams={baseLogoParams}
-              logoScale={params.logo.logoScale}
-              titleOffsetY={params.title.titleOffsetY}
-              logoGapX={params.layout.logoGapX}
-              hoverParams={hoverParams}
-            />
+          {clients.map((client, i) => (
+            <div key={client.name} style={{ transform: `translateY(${arcOffsets[i]}px)` }}>
+              <ClientLogoItem
+                client={client}
+                baseParams={baseLogoParams}
+                logoScale={params.logo.logoScale}
+                titleOffsetY={params.title.titleOffsetY}
+                logoGapX={params.layout.logoGapX}
+                hoverParams={hoverParams}
+              />
+            </div>
           ))}
         </div>
       </div>

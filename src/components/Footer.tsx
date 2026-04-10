@@ -4,10 +4,10 @@ export default function Footer() {
   return (
     <footer className="bg-black/40 border-t border-border py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+        <div className="flex flex-row items-center justify-between md:flex-row md:items-center md:justify-between gap-8">
           {/* Logo */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-4" style={{ paddingLeft: 8 }}>
               <Image
                 src="/logo_png.png"
                 alt="Polarys"
@@ -19,7 +19,7 @@ export default function Footer() {
           </div>
 
           {/* Social */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2" style={{ paddingRight: 8 }}>
             <a
               href="https://www.linkedin.com/company/polarysio/"
               target="_blank"

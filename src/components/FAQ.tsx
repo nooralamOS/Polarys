@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     q: "What makes you different from other LinkedIn agencies?",
-    a: "We combine founder-led content, outbound outreach, and low-cost LinkedIn ads into one unified system. Most agencies only do one of these — we do all three, and they compound together.",
+    a: "We combine founder-led content and outbound outreach into one unified system. Most agencies only do one or the other — ours work together and compound together.",
   },
   {
     q: "Will this work in my niche?",
@@ -21,27 +21,11 @@ const faqs = [
   },
   {
     q: "What is included in the service?",
-    a: "Content strategy, copywriting, design, scheduling, DM management, appointment setting, LinkedIn ads, outreach campaigns, and monthly reporting — all included.",
-  },
-  {
-    q: "How do you manage my DMs?",
-    a: "We use a shared system where our team manages initial conversations, qualifies leads based on your criteria, and books calls directly onto your calendar.",
-  },
-  {
-    q: "Do you manage LinkedIn ad campaigns?",
-    a: "Yes. We create, manage, and optimize LinkedIn ad campaigns designed to boost your highest-performing organic content to your ideal prospects.",
+    a: "Content strategy, copywriting, design, scheduling, outreach campaigns, and monthly reporting — all included.",
   },
   {
     q: "What type of content will you create?",
-    a: "Text posts, carousels, infographics, short-form video scripts, and lead magnets — all crafted in your authentic voice from founder interviews.",
-  },
-  {
-    q: "How does the lead magnet strategy work?",
-    a: "We create high-value free resources (guides, templates, frameworks) that drive inbound connections and newsletter signups from your ideal clients.",
-  },
-  {
-    q: "How do you ensure lead quality?",
-    a: "Through precise targeting, custom qualification criteria, and a multi-touch nurture process. We only book calls with prospects who match your ideal client profile.",
+    a: "Text posts, carousels, infographics — all crafted in your authentic voice from founder interviews.",
   },
 ];
 

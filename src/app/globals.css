@@ -309,18 +309,6 @@ body {
   display: none;
 }
 
-/* Curved client logo row on large screens (smile shape). */
-@media (min-width: 1280px) {
-  .clients-arc-grid > a:nth-child(1),
-  .clients-arc-grid > a:nth-child(4) {
-    transform: translateY(-22px);
-  }
-
-  .clients-arc-grid > a:nth-child(2),
-  .clients-arc-grid > a:nth-child(3) {
-    transform: translateY(10px);
-  }
-}
 
 /* Mobile responsive fixes */
 @media (max-width: 767px) {
@@ -346,6 +334,10 @@ body {
     width: min(300px, 88vw) !important;
     height: auto !important;
     min-height: 200px !important;
+  }
+
+  .sticky-note:nth-child(3) {
+    margin-top: -40px !important;
   }
 }
 

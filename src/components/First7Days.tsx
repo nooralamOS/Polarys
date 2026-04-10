@@ -95,6 +95,9 @@ function CardContent({ item }: { item: typeof steps[0] }) {
 export default function First7Days() {
   const params = { cardGap: 50 };
 
+  const mobile = { containerPaddingX: 11, cardGap: 18, rowGap: 17, cardPadding: 26 };
+
+
   const sectionRef = useRef<HTMLElement>(null);
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
   const dotRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -189,11 +192,16 @@ export default function First7Days() {
       </div>
 
       {/* Mobile timeline — single column, no GSAP */}
-      <div className="md:hidden max-w-xl mx-auto w-full">
+      <div
+        className="md:hidden mx-auto w-full"
+        style={{ maxWidth: 576, paddingLeft: mobile.containerPaddingX, paddingRight: mobile.containerPaddingX }}
+      >
         {steps.map((item, i) => (
-          <div key={item.day} className="flex gap-4">
-            {/* Dot + connecting line column */}
+          <div key={item.day} className="flex" style={{ gap: mobile.rowGap }}>
+            {/* Dot + connecting lines column */}
             <div className="flex flex-col items-center" style={{ flexShrink: 0, width: 20 }}>
+              {/* Top connector — transparent for first item so no line above first dot */}
+              <div style={{ width: 2, height: 20, flexShrink: 0, background: i === 0 ? 'transparent' : LINE_COLOR }} />
               <div
                 style={{
                   width: 18,
@@ -203,21 +211,20 @@ export default function First7Days() {
                   border: '3px solid #111',
                   boxShadow: `0 0 0 2px ${LINE_COLOR}, 0 0 12px ${LINE_COLOR}66`,
                   flexShrink: 0,
-                  marginTop: 20,
                 }}
               />
-              {i < steps.length - 1 && (
-                <div style={{ flex: 1, width: 2, background: LINE_COLOR, minHeight: 24, marginTop: 4 }} />
-              )}
+              {/* Bottom connector — fills remaining height, transparent after last dot */}
+              <div style={{ flex: 1, width: 2, background: i < steps.length - 1 ? LINE_COLOR : 'transparent' }} />
             </div>
             {/* Card */}
-            <div className="flex-1 pb-5">
+            <div className="flex-1" style={{ paddingBottom: i < steps.length - 1 ? mobile.cardGap : 0 }}>
               <article
                 style={{
-                  padding: 20,
+                  padding: mobile.cardPadding,
                   borderRadius: 12,
                   background: CARD_BG,
                   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.07), 0 4px 24px rgba(0,0,0,0.4)',
+                  transform: `translateY(-14px)`,
                 }}
               >
                 <CardContent item={item} />

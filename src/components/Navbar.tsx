@@ -1,35 +1,9 @@
 "use client";
 
-import { useDialKit } from "dialkit";
 import Image from "next/image";
-
-function hexToRgb(hex: string) {
-  const cleaned = hex.replace("#", "");
-  const normalized = cleaned.length === 3
-    ? cleaned.split("").map((char) => char + char).join("")
-    : cleaned;
-
-  if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
-    return { r: 255, g: 255, b: 255 };
-  }
-
-  return {
-    r: parseInt(normalized.slice(0, 2), 16),
-    g: parseInt(normalized.slice(2, 4), 16),
-    b: parseInt(normalized.slice(4, 6), 16),
-  };
-}
 
 export default function Navbar() {
   const logoParams = { logoHeight: 23, offsetX: 8, offsetY: -1 };
-  const gridParams = useDialKit("Navbar Grid", {
-    gridColor: { type: "color", default: "#a6a6a6" },
-    rowMinorOpacity: [0.05, 0, 0.4],
-    rowMajorOpacity: [0.15, 0, 1],
-    colMinorOpacity: [0.03, 0, 0.4],
-    colMajorOpacity: [0.13, 0, 1],
-  });
-  const { r, g, b } = hexToRgb(gridParams.gridColor);
 
   return (
     <>
@@ -72,8 +46,8 @@ export default function Navbar() {
             position: "absolute",
             inset: 0,
             backgroundImage: [
-              `repeating-linear-gradient(0deg, transparent 0px, transparent 7px, rgba(${r},${g},${b},${gridParams.rowMinorOpacity}) 7px, rgba(${r},${g},${b},${gridParams.rowMajorOpacity}) 8px)`,
-              `repeating-linear-gradient(90deg, transparent 0px, transparent 4px, rgba(${r},${g},${b},${gridParams.colMinorOpacity}) 4px, rgba(${r},${g},${b},${gridParams.colMajorOpacity}) 5px)`,
+              "repeating-linear-gradient(0deg, transparent 0px, transparent 7px, rgba(166,166,166,0.05) 7px, rgba(166,166,166,0.15) 8px)",
+              "repeating-linear-gradient(90deg, transparent 0px, transparent 4px, rgba(166,166,166,0.03) 4px, rgba(166,166,166,0.13) 5px)",
             ].join(", "),
             pointerEvents: "none",
             zIndex: 0,

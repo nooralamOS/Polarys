@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useDialKit } from "dialkit";
 
 type BoolGrid = boolean[][];
 
@@ -157,7 +158,7 @@ function renderFrame(
           bright = true;
       }
 
-      return bright ? "*" : "·";
+      return bright ? "*" : ".";
     }).join("")
   );
 }
@@ -550,6 +551,24 @@ type HoverParams = {
   opacity: number;
 };
 
+type LogoDialParams = {
+  size: number;
+  stretchX: number;
+  stretchY: number;
+  offsetX: number;
+  offsetY: number;
+};
+
+type LogoDialMap = {
+  entropy: LogoDialParams;
+  gryd: LogoDialParams;
+  hex: LogoDialParams;
+  milkstraw: LogoDialParams;
+};
+
+const TITLE_BOX_WIDTH_PX = 150;
+const TITLE_BOX_HEIGHT_PX = 24;
+
 function AsciiLogo({
   name,
   artKey,
@@ -558,6 +577,7 @@ function AsciiLogo({
   titleOffsetY,
   ycBadge,
   params,
+  logoDial,
   isHovered,
   hoverParams,
 }: {
@@ -568,6 +588,7 @@ function AsciiLogo({
   titleOffsetY: number;
   ycBadge?: string;
   params: LogoParams;
+  logoDial: LogoDialParams;
   isHovered: boolean;
   hoverParams: HoverParams;
 }) {
@@ -602,49 +623,69 @@ function AsciiLogo({
   return (
     <div className="inline-flex w-full max-w-[280px] flex-col items-center text-center">
       <div className="flex h-[110px] sm:h-[160px] w-full items-center justify-center">
-        {grid ? (
-          <pre
-            className="font-mono select-none mx-auto m-0"
-            style={{
-              fontSize: `${params.fontSize}px`,
-              lineHeight: 1.05,
-              opacity: isHovered ? hoverParams.opacity : params.opacity,
-              letterSpacing: 0,
-              color: isHovered ? hoverParams.color : params.color,
-              filter: isHovered ? `brightness(${hoverParams.brightness / 100})` : undefined,
-              transition: "color 300ms ease, opacity 300ms ease, filter 300ms ease",
-            }}
-            aria-hidden="true"
-          >
-            {lines.join("\n")}
-          </pre>
-        ) : (
-          <div
-            className="font-mono opacity-30 text-xs"
-            style={{ color: params.color }}
-            aria-hidden="true"
-          >
-            ░░░░░░░░░░░░
-            <br />
-            ░░░░░░░░░░░░
-            <br />
-            ░░░░░░░░░░░░
-          </div>
-        )}
+        <div
+          style={{
+            transform: `translate(${logoDial.offsetX}px, ${logoDial.offsetY}px) scale(${logoDial.size * logoDial.stretchX}, ${logoDial.size * logoDial.stretchY})`,
+            transformOrigin: "center center",
+            willChange: "transform",
+          }}
+        >
+          {grid ? (
+            <pre
+              className="font-mono select-none mx-auto m-0"
+              style={{
+                fontFamily:
+                  'var(--font-martian-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                fontSize: `${params.fontSize}px`,
+                lineHeight: 1.05,
+                fontVariantLigatures: "none",
+                WebkitTextSizeAdjust: "100%",
+                opacity: isHovered ? hoverParams.opacity : params.opacity,
+                letterSpacing: 0,
+                color: isHovered ? hoverParams.color : params.color,
+                filter: isHovered ? `brightness(${hoverParams.brightness / 100})` : undefined,
+                transition: "color 300ms ease, opacity 300ms ease, filter 300ms ease",
+              }}
+              aria-hidden="true"
+            >
+              {lines.join("\n")}
+            </pre>
+          ) : (
+            <div
+              className="font-mono opacity-30 text-xs"
+              style={{ color: params.color }}
+              aria-hidden="true"
+            >
+              ░░░░░░░░░░░░
+              <br />
+              ░░░░░░░░░░░░
+              <br />
+              ░░░░░░░░░░░░
+            </div>
+          )}
+        </div>
       </div>
       <div
         className="flex flex-col w-full items-center justify-start min-h-[52px]"
         style={{ marginTop: `${titleOffsetY}px` }}
       >
-        <img
-          src={titleSrc}
-          alt={`${name} title`}
-          className="h-6 w-auto object-contain"
+        <div
+          className="flex items-center justify-center"
           style={{
-            opacity: 1,
-            filter: "brightness(0) saturate(100%) invert(100%)",
+            width: `${TITLE_BOX_WIDTH_PX}px`,
+            height: `${TITLE_BOX_HEIGHT_PX}px`,
           }}
-        />
+        >
+          <img
+            src={titleSrc}
+            alt={`${name} title`}
+            className="max-h-full w-auto max-w-full object-contain"
+            style={{
+              opacity: 1,
+              filter: "brightness(0) saturate(100%) invert(100%)",
+            }}
+          />
+        </div>
         {ycBadge && (
           <span className="mt-1 text-[13px] font-mono text-white tracking-wide">
             [{ycBadge}]
@@ -673,6 +714,8 @@ function ClientLogoItem({
   client,
   baseParams,
   logoScale,
+  isMobile,
+  logoDial,
   titleOffsetY,
   logoGapX,
   hoverParams,
@@ -680,6 +723,8 @@ function ClientLogoItem({
   client: ClientConfig;
   baseParams: LogoParams;
   logoScale: number;
+  isMobile: boolean;
+  logoDial: LogoDialParams;
   titleOffsetY: number;
   logoGapX: number;
   hoverParams: HoverParams;
@@ -725,10 +770,15 @@ function ClientLogoItem({
     spacingPadding: 2,
   };
 
+  const baseFontSize =
+    client.name === "entropy" && isMobile
+      ? Math.max(defaults.sizeLogo * logoScale, 2.3)
+      : defaults.sizeLogo * logoScale;
+
   const logoParams: LogoParams = {
     ...baseParams,
     animSpeed: defaults.animationSpeed,
-    fontSize: defaults.sizeLogo * logoScale,
+    fontSize: baseFontSize,
     labelSize: defaults.sizeLabel,
     color: "#FFFFFF",
   };
@@ -758,6 +808,7 @@ function ClientLogoItem({
         titleOffsetY={titleOffsetY}
         ycBadge={client.ycBadge}
         params={logoParams}
+        logoDial={logoDial}
         isHovered={isHovered}
         hoverParams={hoverParams}
       />
@@ -768,6 +819,36 @@ function ClientLogoItem({
 export default function Clients() {
   const arcOffsets = [0, 10, 0, 0];
   const [isMobile, setIsMobile] = useState(false);
+  const logoDials = useDialKit("Clients Logos", {
+    entropy: {
+      size: [0.89, 0.6, 1.8, 0.01],
+      stretchX: [0.89, 0.7, 1.3, 0.01],
+      stretchY: [1, 0.7, 1.3, 0.01],
+      offsetX: [0, -60, 60, 1],
+      offsetY: [0, -60, 60, 1],
+    },
+    gryd: {
+      size: [1.01, 0.6, 1.8, 0.01],
+      stretchX: [0.91, 0.7, 1.3, 0.01],
+      stretchY: [1, 0.7, 1.3, 0.01],
+      offsetX: [0, -60, 60, 1],
+      offsetY: [-3, -60, 60, 1],
+    },
+    hex: {
+      size: [1.05, 0.6, 1.8, 0.01],
+      stretchX: [0.95, 0.7, 1.3, 0.01],
+      stretchY: [1, 0.7, 1.3, 0.01],
+      offsetX: [0, -60, 60, 1],
+      offsetY: [4, -60, 60, 1],
+    },
+    milkstraw: {
+      size: [0.96, 0.6, 1.8, 0.01],
+      stretchX: [0.92, 0.7, 1.3, 0.01],
+      stretchY: [1, 0.7, 1.3, 0.01],
+      offsetX: [0, -60, 60, 1],
+      offsetY: [-4, -60, 60, 1],
+    },
+  }) as LogoDialMap;
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640);
@@ -786,6 +867,13 @@ export default function Clients() {
     layout: { logoGapX: 9 },
     logo: { logoScale: isMobile ? 0.82 : 1.21 },
     title: { titleOffsetY: -4 },
+  };
+
+  const dialKeyByClientName: Record<string, keyof LogoDialMap> = {
+    entropy: "entropy",
+    gryd: "gryd",
+    HEX: "hex",
+    milkstraw: "milkstraw",
   };
 
   const baseLogoParams: LogoParams = {
@@ -821,6 +909,8 @@ export default function Clients() {
                 client={client}
                 baseParams={baseLogoParams}
                 logoScale={params.logo.logoScale}
+                isMobile={isMobile}
+                logoDial={logoDials[dialKeyByClientName[client.name]]}
                 titleOffsetY={params.title.titleOffsetY}
                 logoGapX={params.layout.logoGapX}
                 hoverParams={hoverParams}
